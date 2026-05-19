@@ -3,7 +3,8 @@
 import { useAuth } from '@/hooks/useAuth';
 import { LayoutDashboard, Users, Calendar, Activity, Utensils, Settings, LogOut } from 'lucide-react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 const menuItems = [
   { name: 'Overview', icon: LayoutDashboard, href: '/dashboard' },
@@ -15,10 +16,24 @@ const menuItems = [
 ];
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const { user, logout } = useAuth();
+  const { user, loading, logout } = useAuth();
   const pathname = usePathname();
+  const router = useRouter();
 
-  if (!user) return <div className="flex h-screen items-center justify-center">Loading...</div>;
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push('/mis/login');
+    }
+  }, [user, loading, router]);
+
+  if (loading || !user) {
+    return (
+      <div className="flex h-screen flex-col items-center justify-center bg-slate-50 gap-4">
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-blue-200 border-t-blue-600"></div>
+        <p className="text-sm font-semibold text-slate-500">Securing your session...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen bg-slate-50">
@@ -51,12 +66,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
           <div className="border-t border-slate-100 p-4">
             <div className="mb-4 flex items-center gap-3 px-2">
-              <div className="h-8 w-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-bold">
-                {user.full_name[0]}
+              <div className="h-8 w-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-bold uppercase">
+                {(user?.full_name || user?.name || 'U')[0]}
               </div>
               <div className="flex-1 overflow-hidden">
-                <p className="truncate text-sm font-medium text-slate-900">{user.full_name}</p>
-                <p className="truncate text-xs text-slate-500">{user.role}</p>
+                <p className="truncate text-sm font-medium text-slate-900">{user?.full_name || user?.name}</p>
+                <p className="truncate text-xs text-slate-500">{user?.role}</p>
               </div>
             </div>
             <button
