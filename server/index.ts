@@ -18,6 +18,7 @@ app.use(express.json());
 
 app.use('/api/auth', authRoutes);
 app.use('/api/patients', patientRoutes);
+app.use('/api/admissions', patientRoutes); // Alias for compatibility with direct frontend queries
 app.use('/api/appointments', appointmentRoutes);
 app.use('/api/icu', icuRoutes);
 app.use('/api/diet', dietRoutes);
