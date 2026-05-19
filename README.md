@@ -1,4 +1,4 @@
-# 🌸 Orchids MediFlow — Premium Hospital Management & Clinical Operations Suite
+# 🌸 ZenithCare— Premium Hospital Management & Clinical Operations Suite
 
 A state-of-the-art, enterprise-grade clinical management and MIS platform designed for modern healthcare environments. Combining a stunning interactive 3D landing page with a robust, role-based administrative dashboard, **Orchids MediFlow** streamlines clinical workflows, secures patient data, and empowers medical staff.
 
