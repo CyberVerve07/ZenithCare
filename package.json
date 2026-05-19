@@ -4,6 +4,7 @@
     "private": true,
     "scripts": {
         "dev": "next dev --turbopack",
+        "server": "npx tsx server/index.ts",
         "build": "next build",
         "start": "next start",
         "lint": "next lint"
