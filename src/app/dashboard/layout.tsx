@@ -5,7 +5,6 @@ import { LayoutDashboard, Users, Calendar, Activity, Utensils, Settings, LogOut,
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import AIChatWidget from '@/components/AIChatWidget';
 
 const menuItems = [
   { name: 'Overview', icon: LayoutDashboard, href: '/dashboard' },
@@ -98,9 +97,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 </div>
 
                 <div>
-                  <h5 className="font-extrabold text-xs tracking-wide">MediFlow AI Assistant</h5>
+                  <h5 className="font-extrabold text-xs tracking-wide">Personal AI Assistant</h5>
                   <p className="text-[10px] text-blue-100/80 leading-relaxed mt-0.5">
-                    Real-time diagnostics support, telemetry checks & diet suggestions.
+                    Your personal copilot for daily tasks, email drafting, schedules & clinical advice.
                   </p>
                 </div>
 
@@ -144,9 +143,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <main className="ml-64 flex-1 p-8">
         {children}
       </main>
-      
-      {/* Global Clinical AI Chat Assistant Widget */}
-      <AIChatWidget />
     </div>
   );
 }
