@@ -22,6 +22,13 @@ export default function AIChatWidget() {
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  // Listen to global open-ai-chat events (triggered from 3D Sidebar button)
+  useEffect(() => {
+    const handleOpenChat = () => setIsOpen(true);
+    window.addEventListener('open-ai-chat', handleOpenChat);
+    return () => window.removeEventListener('open-ai-chat', handleOpenChat);
+  }, []);
+
   const quickActions = [
     { label: '🩺 ICU Protocols', query: 'Show ICU monitoring standards and pulse limits.' },
     { label: '🍎 Cardiac Nutrition', query: 'What are standard dietary plans for Cardiovascular Strain?' },
