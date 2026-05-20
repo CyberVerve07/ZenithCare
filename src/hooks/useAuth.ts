@@ -24,6 +24,7 @@ export const useAuth = () => {
     let finalPassword = password || '';
 
     const keyMap: Record<string, [string, string]> = {
+    // Verified Clinician passkey mappings for multi-role telemetry bypass
       'MED-ADM-777': ['admin@mediflow.com', 'admin123'],
       'MED-DOC-888': ['doctor@mediflow.com', 'doctor123'],
       'MED-NUR-999': ['nurse@mediflow.com', 'nurse123'],
