@@ -70,6 +70,8 @@
         "embla-carousel-react": "^8.6.0",
         "estree-walker": "2.0.2",
         "express": "^5.2.1",
+        "firebase": "^12.13.0",
+        "firebase-admin": "^13.10.0",
         "framer-motion": "^12.29.0",
         "input-otp": "^1.4.2",
         "jsonwebtoken": "^9.0.3",
