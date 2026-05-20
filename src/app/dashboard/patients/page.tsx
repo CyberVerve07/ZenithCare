@@ -17,6 +17,95 @@ import {
   ClipboardList
 } from 'lucide-react';
 
+function renderFormattedText(text: string) {
+  // Regex to match **bold** text
+  const parts = text.split(/(\*\*.*?\*\*)/g);
+  return parts.map((part, i) => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      return <strong key={i} className="font-extrabold text-slate-900">{part.slice(2, -2)}</strong>;
+    }
+    return part;
+  });
+}
+
+function renderClinicalSummary(text: string) {
+  if (!text) return null;
+  
+  // If it doesn't look like markdown, just return it as a normal italic text
+  if (!text.includes('###') && !text.includes('**') && !text.includes('- ')) {
+    return <p className="text-slate-700 italic text-xs leading-relaxed">{text}</p>;
+  }
+
+  const lines = text.split('\n');
+  return (
+    <div className="space-y-4 text-slate-700 leading-relaxed font-sans text-xs">
+      {lines.map((line, index) => {
+        // Headers starting with ### or ## or #
+        if (line.trim().startsWith('### ') || line.trim().startsWith('## ') || line.trim().startsWith('# ')) {
+          const cleanText = line.replace(/^(###|##|#)\s+/, '').replace(/\*\*/g, '');
+          return (
+            <h5 key={index} className="font-extrabold text-slate-900 border-b border-blue-50 pb-1 mt-4 text-[11px] uppercase tracking-wider flex items-center gap-1.5 first:mt-0">
+              <span className="h-1.5 w-1.5 rounded-full bg-blue-600 animate-pulse" />
+              {cleanText}
+            </h5>
+          );
+        }
+        
+        // Bold headers or highlights like: 1. **Clinical State Assessment**:
+        if (/^\d+\.\s+\*\*(.*?)\*\*:(.*)/.test(line.trim())) {
+          const match = line.trim().match(/^\d+\.\s+\*\*(.*?)\*\*:(.*)/);
+          if (match) {
+            return (
+              <div key={index} className="mt-3">
+                <h5 className="font-extrabold text-slate-900 text-[11px] uppercase tracking-wider flex items-center gap-1.5">
+                  <span className="h-1.5 w-1.5 rounded-full bg-blue-600" />
+                  {match[1]}
+                </h5>
+                <p className="text-slate-600 pl-3 mt-1 text-xs">{match[2].trim()}</p>
+              </div>
+            );
+          }
+        }
+        
+        // Bold prefix like: - **Monitoring Frequency**: Check vitals
+        if (/^[-*]\s+\*\*(.*?)\*\*:(.*)/.test(line.trim())) {
+          const match = line.trim().match(/^[-*]\s+\*\*(.*?)\*\*:(.*)/);
+          if (match) {
+            return (
+              <div key={index} className="flex gap-2 pl-3 mt-1.5 items-start text-xs text-slate-600">
+                <span className="text-blue-500 font-bold">•</span>
+                <span>
+                  <strong className="text-slate-900 font-semibold">{match[1]}:</strong>
+                  {renderFormattedText(match[2])}
+                </span>
+              </div>
+            );
+          }
+        }
+        
+        // Bullet list like: - Symptoms are currently managed.
+        if (line.trim().startsWith('- ') || line.trim().startsWith('* ')) {
+          const cleanText = line.trim().substring(2);
+          return (
+            <div key={index} className="flex gap-2 pl-3 mt-1 items-start text-xs text-slate-600">
+              <span className="text-blue-500 font-bold">•</span>
+              <span>{renderFormattedText(cleanText)}</span>
+            </div>
+          );
+        }
+        
+        // Normal text or paragraph lines
+        if (line.trim() === '') return null;
+        return (
+          <p key={index} className="text-xs text-slate-600 pl-1">
+            {renderFormattedText(line)}
+          </p>
+        );
+      })}
+    </div>
+  );
+}
+
 export default function PatientsPage() {
   const [admissions, setAdmissions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -297,15 +386,19 @@ export default function PatientsPage() {
                     {aiLoading ? 'Compiling Chart...' : 'Re-compile Chart'}
                   </button>
                 </div>
-                <div className="text-sm text-slate-700 italic bg-white border border-blue-50 rounded-xl p-4 shadow-sm min-h-[80px]">
+                <div className="text-sm text-slate-700 bg-white border border-blue-50 rounded-xl p-4 shadow-sm min-h-[80px]">
                   {aiLoading ? (
                     <div className="space-y-2 animate-pulse">
                       <div className="h-3.5 bg-slate-100 rounded w-full" />
                       <div className="h-3.5 bg-slate-100 rounded w-5/6" />
                       <div className="h-3.5 bg-slate-100 rounded w-2/3" />
                     </div>
+                  ) : selectedAd.daily_summary ? (
+                    renderClinicalSummary(selectedAd.daily_summary)
                   ) : (
-                    selectedAd.daily_summary || '"No active clinical AI summary generated for this patient. Click Compile Chart above to construct a clinical profile summaries based on the diagnosis."'
+                    <p className="text-slate-500 italic text-xs leading-relaxed">
+                      "No active clinical AI summary generated for this patient. Click Compile Chart above to construct a clinical profile summary based on the diagnosis."
+                    </p>
                   )}
                 </div>
               </div>
