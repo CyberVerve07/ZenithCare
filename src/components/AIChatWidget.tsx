@@ -231,12 +231,29 @@ I am here to guide clinical personnel.
       {/* Floating Button Toggle */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex h-14 w-14 items-center justify-center rounded-full bg-blue-600 text-white hover:bg-blue-700 transition duration-300 shadow-lg shadow-blue-500/30 hover:scale-105 active:scale-95 relative group"
+        className="w-[60px] h-[60px] rounded-full p-[2.5px] bg-gradient-to-tr from-violet-600 via-fuchsia-500 to-cyan-400 shadow-[0_0_20px_rgba(168,85,247,0.5)] hover:shadow-[0_0_30px_rgba(168,85,247,0.85)] hover:scale-105 active:scale-95 transition-all duration-300 relative group cursor-pointer"
       >
-        {isOpen ? <X size={24} /> : <MessageSquare size={24} />}
+        {/* Dark inner face */}
+        <div className="w-full h-full rounded-full bg-slate-950 flex items-center justify-center overflow-hidden relative shadow-inner">
+          {/* Inner shadow/sheen overlay */}
+          <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />
+          
+          {isOpen ? (
+            <X size={22} className="text-white animate-in spin-in duration-300" />
+          ) : (
+            <svg viewBox="0 0 100 100" className="w-[36px] h-[36px] text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.85)] transform group-hover:scale-105 transition-transform duration-300" fill="none" stroke="currentColor" strokeWidth="5.5" strokeLinecap="round" strokeLinejoin="round">
+              {/* Premium signature cursive path representing clinical intelligence signature */}
+              <path d="M25,65 C30,45 40,25 50,25 C55,25 58,35 55,45 C50,60 40,75 55,75 C65,75 75,55 78,40 M72,30 C76,28 80,32 78,36 C76,42 70,68 76,70 C79,71 84,65 86,60" />
+            </svg>
+          )}
+        </div>
         
-        {/* Soft glowing outer pulsing ring */}
-        <span className="absolute -inset-0.5 rounded-full border border-blue-500/20 group-hover:border-blue-500/40 animate-ping pointer-events-none" style={{ animationDuration: '3s' }} />
+        {/* Notification telemetry status dot on top right */}
+        {!isOpen && (
+          <span className="absolute -top-0.5 -right-0.5 h-[17px] w-[17px] rounded-full bg-red-500 border-2 border-white shadow-sm flex items-center justify-center animate-bounce" style={{ animationDuration: '2.5s' }}>
+            <span className="h-[6px] w-[6px] rounded-full bg-white" />
+          </span>
+        )}
       </button>
     </div>
   );
