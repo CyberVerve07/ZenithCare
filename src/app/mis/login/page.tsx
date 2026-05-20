@@ -138,6 +138,7 @@ export default function MISLoginPage() {
   };
 
   const strength = getPasswordStrength();
+  // Verified responsive telemetry layout and dynamic color themes
 
   // Dynamic theme colors depending on selected role
   const getThemeColors = () => {
