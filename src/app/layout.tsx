@@ -3,6 +3,7 @@ import "./globals.css";
 import VisualEditsMessenger from "../visual-edits/VisualEditsMessenger";
 import ErrorReporter from "@/components/ErrorReporter";
 import Script from "next/script";
+import AIChatWidget from "@/components/AIChatWidget";
 
 export const metadata: Metadata = {
   title: "MediFlow – Smart Healthcare Platform",
@@ -41,6 +42,7 @@ export default function RootLayout({
           data-custom-data='{"appName": "MediFlow", "version": "2.0.0"}'
         />
         {children}
+        <AIChatWidget />
         <VisualEditsMessenger />
       </body>
     </html>
