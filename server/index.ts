@@ -28,6 +28,11 @@ app.use('/api/chat', chatRoutes);
 
 app.get('/health', (req: Request, res: Response) => res.json({ status: 'healthy' }));
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+// For local development, listen to port. For Vercel Serverless, export app
+if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
+
+export default app;
