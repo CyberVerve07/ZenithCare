@@ -5,6 +5,7 @@ import { LayoutDashboard, Users, Calendar, Activity, Utensils, Settings, LogOut 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import AIChatWidget from '@/components/AIChatWidget';
 
 const menuItems = [
   { name: 'Overview', icon: LayoutDashboard, href: '/dashboard' },
@@ -89,6 +90,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <main className="ml-64 flex-1 p-8">
         {children}
       </main>
+      
+      {/* Global Clinical AI Chat Assistant Widget */}
+      <AIChatWidget />
     </div>
   );
 }

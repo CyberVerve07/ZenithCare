@@ -7,6 +7,7 @@ import appointmentRoutes from './routes/appointments';
 import icuRoutes from './routes/icu';
 import dietRoutes from './routes/diet';
 import adminRoutes from './routes/admin';
+import chatRoutes from './routes/chat';
 
 dotenv.config();
 
@@ -23,6 +24,7 @@ app.use('/api/appointments', appointmentRoutes);
 app.use('/api/icu', icuRoutes);
 app.use('/api/diet', dietRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/chat', chatRoutes);
 
 app.get('/health', (req: Request, res: Response) => res.json({ status: 'healthy' }));
 
