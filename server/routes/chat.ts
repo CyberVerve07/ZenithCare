@@ -1,11 +1,11 @@
 import express, { Response } from 'express';
-import { authenticate, AuthRequest } from '../middleware/auth';
+import { optionalAuthenticate, AuthRequest } from '../middleware/auth';
 import axios from 'axios';
 
 const router = express.Router();
 
-router.post('/', authenticate, async (req: AuthRequest, res: Response) => {
-  const { messages } = req.body;
+router.post('/', optionalAuthenticate, async (req: AuthRequest, res: Response) => {
+  const { messages, userContext } = req.body;
 
   if (!messages || !Array.isArray(messages)) {
     return res.status(400).json({ error: 'Invalid request body. Expected an array of messages.' });
@@ -13,11 +13,22 @@ router.post('/', authenticate, async (req: AuthRequest, res: Response) => {
 
   const groqApiKey = process.env.GROQ_API_KEY || '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';
 
-  // Construct message payload for Groq chat completion
+  // Construct message payload for Groq chat completion customized for personal assistant use
+  const name = userContext?.name || 'hospital member';
+  const role = userContext?.role || req.user?.role || 'staff member';
+
+  const systemPrompt = `You are MediFlow AI, a premium, intelligent personal and clinical co-pilot at Orchids MediFlow Hospital. You are currently assisting ${name}, who is logged in as a ${role}. 
+You are highly versatile and ready for "personal use" to assist them with:
+1. General clinical reference, ICU vital thresholds, patient diagnosis notes, and patient diet adjustments.
+2. Personal productivity, task lists, drafting professional emails/messages to patients or staff, calculation of clinical values (e.g. BMI, GFR, drug dosages).
+3. Operational guidance like appointment booking guidelines and scheduling conflict prevention.
+
+Answer professionally, concisely, and with premium styling. Use structured format, bullet points, lists, or step-by-step instructions where applicable. Be highly helpful, supportive, and friendly, but keep replies concise to optimize token usage.`;
+
   const chatMessages = [
     {
       role: 'system',
-      content: 'You are MediFlow AI, a premium clinical assistant at Orchids MediFlow Hospital. You help doctors, nurses, and medical staff. Answer professionally, concisely, and with precise clinical terms. Avoid chatty fluff; provide lists, bullet points, or step-by-step procedures when relevant.'
+      content: systemPrompt
     },
     ...messages.slice(-10) // Limit to last 10 messages for token optimization
   ];
