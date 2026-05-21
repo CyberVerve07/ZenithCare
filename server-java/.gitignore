@@ -1,0 +1,17 @@
+target/
+!.mvn/wrapper/maven-wrapper.jar
+.idea/
+*.class
+*.jar
+*.war
+*.ear
+*.tar.gz
+*.zip
+*.rar
+*.log
+.classpath
+.project
+.settings/
+bin/
+dependency-reduced-pom.xml
+.history/
