@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { Heart, Brain, Activity, Baby, Stethoscope, Zap, Microscope, ChevronRight, Users, Clock } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const departments = [
   {
@@ -90,14 +91,34 @@ const departments = [
   },
 ];
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.08,
+    },
+  },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
+  },
+};
+
 export default function DepartmentsSection() {
   return (
-    <section id="departments" className="py-24 bg-white">
+    <section id="departments" className="py-24 bg-white relative">
+      <div className="absolute left-0 bottom-0 w-[300px] h-[300px] bg-blue-50/30 rounded-full blur-3xl pointer-events-none" />
       <div className="container-xl mx-auto px-4">
         {/* Header */}
         <div className="max-w-2xl mx-auto text-center mb-16">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-100 rounded-full text-blue-700 text-sm font-semibold mb-6">
-            Specialized Medical Care
+            Specialized Medical Wards
           </div>
           <h2 className="text-4xl lg:text-5xl font-black text-[#0F172A] tracking-tight mb-4">
             World-Class Departments
@@ -107,59 +128,71 @@ export default function DepartmentsSection() {
           </p>
         </div>
 
-        {/* Department Cards */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+        {/* Department Cards Grid with framer-motion */}
+        <motion.div 
+          className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-100px' }}
+        >
           {departments.map((dept) => {
             const Icon = dept.icon;
             return (
-              <Link
+              <motion.div
                 key={dept.slug}
-                href={`/departments/${dept.slug}`}
-                className={`group relative flex flex-col bg-white rounded-2xl border ${dept.border} ${dept.hover} p-6 transition-all duration-300 card-float hover:shadow-lg`}
+                variants={cardVariants}
+                whileHover={{ y: -6, transition: { duration: 0.25, ease: 'easeOut' } }}
+                className="h-full"
               >
-                {/* Availability Badge */}
-                <div className="absolute top-4 right-4">
-                  <span className={`text-[10px] font-bold px-2 py-1 rounded-full ${
-                    dept.available ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-500'
-                  }`}>
-                    {dept.available ? '● Available' : '○ Limited'}
-                  </span>
-                </div>
-
-                {/* Icon */}
-                <div className={`w-12 h-12 ${dept.bg} rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                  <Icon size={22} className={dept.color} />
-                </div>
-
-                {/* Content */}
-                <h3 className="text-base font-black text-[#0F172A] mb-2 group-hover:text-blue-600 transition-colors">
-                  {dept.name}
-                </h3>
-                <p className="text-sm text-slate-500 leading-relaxed flex-1 mb-4">
-                  {dept.description}
-                </p>
-
-                {/* Footer */}
-                <div className="flex items-center justify-between pt-3 border-t border-slate-100">
-                  <div className="flex items-center gap-1 text-xs text-slate-500">
-                    <Users size={12} />
-                    <span className="font-semibold">{dept.specialists} specialists</span>
+                <Link
+                  href={`/departments/${dept.slug}`}
+                  className={`group relative flex flex-col h-full bg-white rounded-2.5xl border ${dept.border} ${dept.hover} p-6.5 transition-all duration-300 shadow-sm hover:shadow-lg hover:shadow-blue-500/5`}
+                >
+                  {/* Availability Badge */}
+                  <div className="absolute top-4 right-4">
+                    <span className={`text-[9px] font-extrabold uppercase tracking-wide px-2 py-0.5 rounded-full ${
+                      dept.available ? 'bg-emerald-50 text-emerald-700 border border-emerald-100' : 'bg-slate-100 text-slate-500'
+                    }`}>
+                      {dept.available ? '● Active' : '○ Limited'}
+                    </span>
                   </div>
-                  <ChevronRight size={16} className="text-slate-300 group-hover:text-blue-500 group-hover:translate-x-1 transition-all" />
-                </div>
-              </Link>
+
+                  {/* Icon */}
+                  <div className={`w-12 h-12 ${dept.bg} rounded-2xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300`}>
+                    <Icon size={22} className={dept.color} />
+                  </div>
+
+                  {/* Content */}
+                  <h3 className="text-base font-black text-[#0F172A] mb-2 group-hover:text-blue-600 transition-colors">
+                    {dept.name}
+                  </h3>
+                  <p className="text-xs text-slate-500 leading-relaxed flex-1 mb-5">
+                    {dept.description}
+                  </p>
+
+                  {/* Footer */}
+                  <div className="flex items-center justify-between pt-4 border-t border-slate-100">
+                    <div className="flex items-center gap-1.5 text-xs text-slate-500 font-semibold">
+                      <Users size={13} className="text-slate-400" />
+                      <span>{dept.specialists} specialists</span>
+                    </div>
+                    <ChevronRight size={16} className="text-slate-300 group-hover:text-blue-500 group-hover:translate-x-1 transition-all" />
+                  </div>
+                </Link>
+              </motion.div>
             );
           })}
-        </div>
+        </motion.div>
 
         {/* View All Button */}
-        <div className="text-center mt-10">
+        <div className="text-center mt-12">
           <Link
             href="/departments"
-            className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#0F172A] text-white font-bold rounded-xl hover:bg-slate-800 transition-all hover:-translate-y-0.5 shadow-lg"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-[#0F172A] hover:bg-[#1E293B] text-white font-extrabold rounded-2xl shadow-lg transition-all hover:-translate-y-0.5 group"
           >
-            View All Departments
-            <ChevronRight size={16} />
+            View All Wards
+            <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
       </div>

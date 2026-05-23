@@ -1,13 +1,14 @@
 'use client';
 
 import { Ambulance, Video, FlaskConical, Pill, Zap, ArrowRight } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const services = [
   {
     icon: Ambulance,
     title: 'Emergency Care',
     desc: '24/7 emergency response with advanced trauma bays and rapid intervention teams.',
-    color: 'from-red-500 to-rose-600',
+    color: 'from-rose-500 to-red-600',
     light: 'bg-red-50 text-red-600',
   },
   {
@@ -28,8 +29,8 @@ const services = [
     icon: Pill,
     title: 'In-House Pharmacy',
     desc: '24-hour pharmacy with genuine medicines, home delivery, and e-prescriptions.',
-    color: 'from-violet-500 to-purple-600',
-    light: 'bg-violet-50 text-violet-600',
+    color: 'from-violet-500 to-purple-605',
+    light: 'bg-violet-50 text-violet-650',
   },
   {
     icon: Zap,
@@ -40,18 +41,38 @@ const services = [
   },
 ];
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.08,
+    },
+  },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
+  },
+};
+
 export default function ServicesSection() {
   return (
     <section id="services" className="py-24 bg-[#0F172A] text-white relative overflow-hidden">
-      <div className="absolute inset-0 dot-grid opacity-10" />
-      <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-blue-500/10 rounded-full blur-3xl" />
+      <div className="absolute inset-0 dot-grid opacity-5 pointer-events-none" />
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-teal-500/5 rounded-full blur-3xl pointer-events-none" />
 
       <div className="container-xl mx-auto px-4 relative z-10">
         <div className="max-w-2xl mb-16">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 border border-white/10 rounded-full text-blue-300 text-sm font-semibold mb-6">
-            Our Services
+            Our Care Services
           </div>
-          <h2 className="text-4xl lg:text-5xl font-black tracking-tight mb-4">
+          <h2 className="text-4xl lg:text-5xl font-black tracking-tight mb-4 leading-tight">
             Complete Healthcare Ecosystem
           </h2>
           <p className="text-lg text-slate-400 leading-relaxed">
@@ -59,26 +80,44 @@ export default function ServicesSection() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Services Grid with framer-motion */}
+        <motion.div 
+          className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-100px' }}
+        >
           {services.map((svc) => {
             const Icon = svc.icon;
             return (
-              <div
+              <motion.div
                 key={svc.title}
-                className="group bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 cursor-pointer"
+                variants={cardVariants}
+                whileHover={{ y: -6, transition: { duration: 0.2, ease: 'easeOut' } }}
               >
-                <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${svc.color} flex items-center justify-center mb-5 group-hover:scale-110 transition-transform`}>
-                  <Icon size={22} className="text-white" />
+                <div
+                  className="group h-full bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 rounded-2.5xl p-7 transition-all duration-350 cursor-pointer flex flex-col justify-between"
+                >
+                  <div>
+                    {/* Icon */}
+                    <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${svc.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-black/20`}>
+                      <Icon size={22} className="text-white" />
+                    </div>
+                    {/* Title */}
+                    <h3 className="text-lg font-black mb-2 group-hover:text-blue-300 transition-colors">{svc.title}</h3>
+                    {/* Description */}
+                    <p className="text-slate-400 text-xs leading-relaxed mb-6 font-medium">{svc.desc}</p>
+                  </div>
+                  {/* Link CTA */}
+                  <div className="flex items-center gap-1.5 text-blue-400 text-xs font-bold group-hover:gap-2.5 transition-all">
+                    Explore Details <ArrowRight size={13} />
+                  </div>
                 </div>
-                <h3 className="text-lg font-black mb-2 group-hover:text-blue-300 transition-colors">{svc.title}</h3>
-                <p className="text-slate-400 text-sm leading-relaxed mb-4">{svc.desc}</p>
-                <div className="flex items-center gap-1 text-blue-400 text-xs font-bold group-hover:gap-2 transition-all">
-                  Learn More <ArrowRight size={13} />
-                </div>
-              </div>
+              </motion.div>
             );
           })}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
