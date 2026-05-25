@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Star, Quote, ChevronLeft, ChevronRight } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const testimonials = [
   {
@@ -11,7 +12,7 @@ const testimonials = [
     text: 'MediFlow completely changed my healthcare experience. Booking an appointment was incredibly easy, the doctors were world-class, and the entire process felt seamless and premium.',
     dept: 'Cardiology',
     initials: 'RS',
-    color: 'from-red-400 to-rose-500',
+    color: 'from-rose-400 to-rose-500',
   },
   {
     name: 'Arun Patel',
@@ -20,16 +21,16 @@ const testimonials = [
     text: 'I was amazed by the level of care and attention I received. The neurology team diagnosed my condition within hours. Modern technology combined with genuine compassion.',
     dept: 'Neurology',
     initials: 'AP',
-    color: 'from-blue-400 to-indigo-500',
+    color: 'from-brand-primary to-brand-primary/80',
   },
   {
     name: 'Meena Krishnan',
     location: 'Chennai',
     rating: 5,
-    text: 'My daughter\'s pediatric care here was exceptional. The doctors took time to explain everything, the facility was spotless, and the online booking system is brilliant.',
+    text: "My daughter's pediatric care here was exceptional. The doctors took time to explain everything, the facility was spotless, and the online booking system is brilliant.",
     dept: 'Pediatrics',
     initials: 'MK',
-    color: 'from-pink-400 to-purple-500',
+    color: 'from-pink-400 to-pink-500',
   },
   {
     name: 'Vikram Singh',
@@ -38,7 +39,7 @@ const testimonials = [
     text: 'After my orthopedic surgery, the recovery support and follow-up process was outstanding. The MediFlow team truly cares about long-term patient outcomes.',
     dept: 'Orthopedics',
     initials: 'VS',
-    color: 'from-amber-400 to-orange-500',
+    color: 'from-amber-400 to-amber-500',
   },
 ];
 
@@ -56,79 +57,88 @@ export default function TestimonialsAndFAQ() {
 
   return (
     <>
-      {/* Testimonials */}
-      <section id="testimonials" className="py-24 bg-[#F8FAFC]">
+      {/* Testimonials Slider */}
+      <section id="testimonials" className="py-24 bg-slate-50 relative overflow-hidden">
         <div className="container-xl mx-auto px-4">
+          
           <div className="max-w-2xl mx-auto text-center mb-16">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-100 rounded-full text-blue-700 text-sm font-semibold mb-6">
-              Patient Stories
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-brand-primary/5 border border-brand-primary/10 rounded-full text-brand-primary text-xs font-bold uppercase tracking-wider mb-6">
+              Patient Testimonials
             </div>
-            <h2 className="text-4xl lg:text-5xl font-black text-[#0F172A] tracking-tight mb-4">
+            <h2 className="text-4xl lg:text-5xl font-black text-[#0F172A] tracking-tight font-display mb-4">
               Trusted by Thousands
             </h2>
           </div>
 
-          {/* Featured Testimonial */}
-          <div className="max-w-3xl mx-auto bg-white rounded-3xl border border-slate-100 shadow-xl p-10 relative">
-            <Quote size={40} className="text-blue-100 absolute top-8 left-8" />
-            <div className="relative">
-              <div className="flex items-center gap-1 mb-4">
+          {/* Testimonial slider card */}
+          <div className="max-w-3xl mx-auto bg-white rounded-[28px] border border-slate-200/60 shadow-xl p-8 md:p-10 relative">
+            <Quote size={40} className="text-slate-100 absolute top-8 left-8" />
+            
+            <div className="relative z-10">
+              {/* Rating */}
+              <div className="flex items-center gap-1 mb-5">
                 {[...Array(testimonials[active].rating)].map((_, i) => (
-                  <Star key={i} size={16} className="text-amber-400 fill-amber-400" />
+                  <Star key={i} size={15} className="text-amber-450 fill-amber-450" />
                 ))}
               </div>
-              <p className="text-lg text-slate-700 leading-relaxed italic mb-8">
+
+              {/* Text */}
+              <p className="text-base md:text-lg text-slate-700 leading-relaxed italic mb-8 font-medium">
                 "{testimonials[active].text}"
               </p>
+
+              {/* Author */}
               <div className="flex items-center gap-4">
-                <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${testimonials[active].color} flex items-center justify-center text-white font-black`}>
+                <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${testimonials[active].color} flex items-center justify-center text-white font-black text-sm`}>
                   {testimonials[active].initials}
                 </div>
                 <div>
-                  <p className="font-black text-[#0F172A]">{testimonials[active].name}</p>
-                  <p className="text-sm text-slate-400">{testimonials[active].location} · {testimonials[active].dept} Patient</p>
+                  <p className="font-black text-[#0F172A] text-sm font-display">{testimonials[active].name}</p>
+                  <p className="text-xs text-slate-400 font-semibold">{testimonials[active].location} · {testimonials[active].dept} ward patient</p>
                 </div>
               </div>
             </div>
 
             {/* Controls */}
-            <div className="absolute bottom-8 right-8 flex items-center gap-2">
+            <div className="absolute bottom-8 right-8 flex items-center gap-2.5">
               <button
                 onClick={() => setActive((a) => (a - 1 + testimonials.length) % testimonials.length)}
-                className="w-9 h-9 rounded-full border border-slate-200 hover:bg-slate-50 flex items-center justify-center transition-colors"
+                className="w-9.5 h-9.5 rounded-xl border border-slate-200 hover:bg-slate-50 flex items-center justify-center transition-colors text-slate-650"
               >
                 <ChevronLeft size={16} />
               </button>
               <button
                 onClick={() => setActive((a) => (a + 1) % testimonials.length)}
-                className="w-9 h-9 rounded-full bg-blue-600 text-white hover:bg-blue-700 flex items-center justify-center transition-colors"
+                className="w-9.5 h-9.5 rounded-xl bg-brand-primary hover:bg-brand-primary/95 text-white flex items-center justify-center transition-colors shadow-sm"
               >
                 <ChevronRight size={16} />
               </button>
             </div>
           </div>
 
-          {/* Thumbnail Nav */}
-          <div className="flex justify-center gap-3 mt-6">
+          {/* Indicators */}
+          <div className="flex justify-center gap-2.5 mt-6">
             {testimonials.map((t, i) => (
               <button
                 key={t.name}
                 onClick={() => setActive(i)}
-                className={`w-2.5 h-2.5 rounded-full transition-all ${i === active ? 'bg-blue-600 w-6' : 'bg-slate-300'}`}
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${i === active ? 'bg-brand-primary w-5' : 'bg-slate-350'}`}
               />
             ))}
           </div>
+
         </div>
       </section>
 
-      {/* FAQ */}
-      <section id="faq" className="py-24 bg-white">
+      {/* FAQ Accordion */}
+      <section id="faq" className="py-24 bg-white relative overflow-hidden">
         <div className="container-xl mx-auto px-4 max-w-3xl">
+          
           <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-100 rounded-full text-blue-700 text-sm font-semibold mb-6">
-              Got Questions?
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-brand-primary/5 border border-brand-primary/10 rounded-full text-brand-primary text-xs font-bold uppercase tracking-wider mb-6">
+              Common Inquiries
             </div>
-            <h2 className="text-4xl lg:text-5xl font-black text-[#0F172A] tracking-tight">
+            <h2 className="text-4xl lg:text-5xl font-black text-[#0F172A] tracking-tight font-display">
               Frequently Asked Questions
             </h2>
           </div>
@@ -137,27 +147,31 @@ export default function TestimonialsAndFAQ() {
             {faqs.map((faq, i) => (
               <div
                 key={i}
-                className={`border rounded-2xl overflow-hidden transition-all duration-200 ${
-                  openFaq === i ? 'border-blue-200 bg-blue-50/30' : 'border-slate-200 bg-white'
+                className={`border rounded-[20px] overflow-hidden transition-all duration-300 ${
+                  openFaq === i 
+                    ? 'border-brand-primary/20 bg-brand-primary/5' 
+                    : 'border-slate-200 bg-white hover:border-slate-300'
                 }`}
               >
                 <button
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                  className="w-full flex items-center justify-between px-6 py-4 text-left"
+                  className="w-full flex items-center justify-between px-6 py-4.5 text-left transition-colors font-display"
                 >
-                  <span className="font-bold text-[#0F172A] text-sm">{faq.q}</span>
-                  <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 ml-4 transition-all ${openFaq === i ? 'bg-blue-600 rotate-180' : 'bg-slate-100'}`}>
-                    <ChevronRight size={14} className={`transition-all ${openFaq === i ? 'text-white rotate-90' : 'text-slate-500'}`} />
+                  <span className="font-extrabold text-[#0F172A] text-sm">{faq.q}</span>
+                  <div className={`w-6 h-6 rounded-lg flex items-center justify-center flex-shrink-0 ml-4 transition-all duration-300 ${openFaq === i ? 'bg-brand-primary rotate-185' : 'bg-slate-100'}`}>
+                    <ChevronRight size={13} className={`transition-all duration-300 ${openFaq === i ? 'text-white rotate-90' : 'text-slate-500'}`} />
                   </div>
                 </button>
+                
                 {openFaq === i && (
                   <div className="px-6 pb-5">
-                    <p className="text-sm text-slate-500 leading-relaxed">{faq.a}</p>
+                    <p className="text-xs text-slate-500 leading-relaxed font-sans font-medium">{faq.a}</p>
                   </div>
                 )}
               </div>
             ))}
           </div>
+
         </div>
       </section>
     </>
